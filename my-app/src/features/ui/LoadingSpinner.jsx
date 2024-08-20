@@ -1,7 +1,11 @@
 import React from "react";
 
 function LoadingSpinner() {
-  return <div>LoadingSpinner...</div>;
+  return (
+    <div className=" absolute bg-slate-200/20 flex items-center justify-center inset-0 backdrop-blur-sm">
+      <div className="loader"></div>
+    </div>
+  );
 }
 
 export default LoadingSpinner;

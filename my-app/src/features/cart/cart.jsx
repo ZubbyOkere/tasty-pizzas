@@ -1,41 +1,50 @@
 import { Link } from "react-router-dom";
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import CartItem from "../cart/cartItem";
+import EmptyCart from "./EmptyCart";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart, deleteItem, getCart } from "./cartSlice";
 
 function Cart() {
-  const cart = fakeCart;
+  const username = useSelector((state) => state.user.userName);
 
+  const dispatch = useDispatch();
+
+  const cart = useSelector(getCart);
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+
+  if (!cart.length) return <EmptyCart />;
   return (
     <div>
-      <Link to="/menu">&larr; Back to menu</Link>
+      <Link
+        to="/menu"
+        className="bg-blue-400 py-2 px-4 rounded-full hover:bg-black hover:text-white"
+      >
+        &larr; Back to menu
+      </Link>
 
-      <h2>Your cart, %NAME%</h2>
+      <h2 className="mt-4">Your cart, {username}</h2>
+      <ul>
+        {cart.map((item) => (
+          <CartItem item={item} key={item.pizzaId} />
+        ))}
+      </ul>
 
       <div>
-        <Link to="/order/new">Order pizzas</Link>
-        <button>Clear cart</button>
+        <Link
+          to="/order"
+          className="bg-blue-400 py-2 px-4 rounded-full hover:bg-black hover:text-white"
+        >
+          Order pizzas
+        </Link>
+        <button
+          className="bg-blue-400 py-2 px-4 rounded-full hover:bg-black hover:text-white"
+          onClick={handleClearCart}
+        >
+          Clear cart
+        </button>
       </div>
     </div>
   );
